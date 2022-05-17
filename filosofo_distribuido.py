@@ -15,11 +15,12 @@ data_think = [False]*5
 
 def on_message(client, userdata, message):
     msg = message.payload.decode("utf-8")
-    topic = msg.topic
+    num = int(msg)
+    topic = message.topic
     if topic == "Rwants_eat":
-        data_eat[msg] = True
+        data_eat[num] = True
     else:
-        data_think[msg] = True
+        data_think[num] = True
     
 def philosopher_task(num:int, lock):
     client.subscribe("Rwants_eat")
@@ -30,12 +31,16 @@ def philosopher_task(num:int, lock):
         print (f"Philosofer {num} wants to eat")
         client.publish("wants_eat", num)
         while not(data_eat[num]):
+            client.loop_start()
             client.on_message = on_message
+            client.loop_stop()
         data_eat[num] = False
         print (f"Philosofer {num} eating")
         client.publish("wants_think", num)
         while not(data_think[num]):
+            client.loop_start()
             client.on_message = on_message
+            client.loop_stop()
         data_think[num]=False
         print (f"Philosofer {num} stops eating")
         
