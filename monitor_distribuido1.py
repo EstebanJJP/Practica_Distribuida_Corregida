@@ -1,13 +1,7 @@
 from multiprocessing import Lock,Condition, Manager
 from multiprocessing import Value
-
 import paho.mqtt.client as mqtt
 
-mqttBroker = "mqtt.eclipseprojects.io"
-# mqttBroker = "wild.mat.ucm.es"
-client = mqtt.Client()
-client.connect(mqttBroker)
-        
 class Table():
     def __init__(self, NPHIL, manager):
         self.currentphil = None
@@ -36,10 +30,9 @@ class Table():
         self.freefork.notify_all()
         self.mutex.release()
     
-
-manager = Manager()        
-table= Table(5,manager)
-
+manager = Manager()
+nphil = input('¿Cuántos filósofos va a ejecutar?')
+table= Table(int(nphil),manager)
 
 def on_message(client, userdata, message):
     msg = message.payload.decode("utf-8")
@@ -57,7 +50,7 @@ def on_message(client, userdata, message):
 
 def main():
     mqttBroker = "mqtt.eclipseprojects.io"
-    # mqttBroker = "wild.mat.ucm.es"
+    #mqttBroker = "wild.mat.ucm.es"
     client = mqtt.Client()
     client.connect(mqttBroker)
     client.subscribe("Current_phil")

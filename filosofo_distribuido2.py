@@ -2,8 +2,6 @@ from multiprocessing import Semaphore
 import paho.mqtt.client as mqtt
 import sys
 
-
-
 def on_message(client, userdata, message):
     msg = message.payload.decode("utf-8")
     num = int(msg)
@@ -15,9 +13,6 @@ def on_message(client, userdata, message):
         if num == numero:
             userdata['wants_think'].release()
 
-
-
-
 def quiero_comer(num,user_data,client):
     client.publish("wants_eat",num)
     user_data['wants_eat'].acquire()
@@ -26,16 +21,16 @@ def quiero_pensar(num,user_data,client):
     client.publish("wants_think",num)
     user_data['wants_think'].acquire()
 
-
 def main(num,user_data):
     mqttBroker = "mqtt.eclipseprojects.io"
-    # mqttBroker = "wild.mat.ucm.es"
+    #mqttBroker = "wild.mat.ucm.es"
     client = mqtt.Client(userdata = user_data)
     client.connect(mqttBroker)
     client.subscribe("Rwants_eat")
     client.subscribe("Rwants_think")
     client.on_message = on_message
     client.loop_start()
+    client.publish("Current_phil",num)
     while True:
         print (f"Philosofer {num} thinking")
         print (f"Philosofer {num} wants to eat")
