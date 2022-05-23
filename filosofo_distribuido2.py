@@ -1,3 +1,7 @@
+"""Filosofo distribuido:
+Se ejecuta cada programa en un terminal (tras haberlo hecho con el monitor) junto con el número de filósofo que debemos ejecutar.
+Empezar con el número 0 hasta el (nphil-1) para que luego no se salga de rango en la lista."""
+
 from multiprocessing import Semaphore
 import paho.mqtt.client as mqtt
 import sys

@@ -1,3 +1,7 @@
+"""Monitor distribuido:
+   Ejecutar primero este programa para que pueda ir recibiendo mensajes
+   Pedirá un input del número de filósofos que deseamos utilizar, tantos como programas de filosofo_distribuido2.py queramos abrir en una terminal aparte"""
+
 from multiprocessing import Lock,Condition, Manager
 from multiprocessing import Value
 import paho.mqtt.client as mqtt
