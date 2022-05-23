@@ -31,9 +31,8 @@ class Table():
         self.mutex.release()
     
 manager = Manager()
-nphil = input('¿Cuántos filósofos va a ejecutar?')
+nphil = input('¿Cuántos filósofos va a ejecutar? ')
 table= Table(int(nphil),manager)
-
 def on_message(client, userdata, message):
     msg = message.payload.decode("utf-8")
     num = int(msg)
@@ -57,7 +56,7 @@ def main():
     client.subscribe("wants_eat")
     client.subscribe("wants_think")
     client.on_message = on_message
-    client.loop_start()
+    client.loop_forever()
 
 if __name__ == '__main__':
      main()

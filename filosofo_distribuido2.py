@@ -1,6 +1,7 @@
 from multiprocessing import Semaphore
 import paho.mqtt.client as mqtt
 import sys
+import time
 
 def on_message(client, userdata, message):
     msg = message.payload.decode("utf-8")
@@ -9,7 +10,7 @@ def on_message(client, userdata, message):
     if topic == "Rwants_eat":
         if num == numero:
             userdata['wants_eat'].release() 
-    else:
+    elif topic == "Rwants_think":
         if num == numero:
             userdata['wants_think'].release()
 
@@ -32,18 +33,21 @@ def main(num,user_data):
     client.loop_start()
     client.publish("Current_phil",num)
     while True:
+        time.sleep(1)
         print (f"Philosofer {num} thinking")
         print (f"Philosofer {num} wants to eat")
         quiero_comer(num,user_data,client)
         print (f"Philosofer {num} eating")
+        time.sleep(2)
         quiero_pensar(num,user_data,client)
         print (f"Philosofer {num} stops eating")
+        time.sleep(3)
     
 if len(sys.argv)>1:
-    numero = sys.argv[1]
-
+    numero = int(sys.argv[1])
+    print(numero)
 if __name__ == '__main__':
-    user_data = {'wants_eat':Semaphore(0),'wants_think':Semaphore(0)}
+    user_data = {'wants_eat':Semaphore(0),'wants_think':Semaphore(0),'pause':Semaphore(0)}
     if len(sys.argv)>1:
         num = sys.argv[1]
         main(num,user_data)
